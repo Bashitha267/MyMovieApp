@@ -8,6 +8,9 @@ const Layout = () => {
         <Stack.Screen name='(tabs)' options={{
             headerShown:false
         }}></Stack.Screen>
+        <Stack.Screen name='Movie/[id]' options={{
+            headerShown:false
+        }}></Stack.Screen>
        </Stack>
     );
 }

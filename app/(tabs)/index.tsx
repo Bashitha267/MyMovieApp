@@ -1,13 +1,18 @@
-import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet } from "react-native";
+import Corousel from "../components/Corousel";
+import MovieCate from "../components/MovieCate";
+import Search from "../components/Search";
 
 export default function Page() {
   return (
-    <SafeAreaView className="flex-1" style={styles.container}>
-      <View>
-        <Text >Hello World</Text>
-        <Text >This is the first page of your app.</Text>
-      </View>
+    <ScrollView className=" bg-black" style={styles.container}>
+       <SafeAreaView >
+      <Search/>
+      <Corousel/>
+      <MovieCate/>
     </SafeAreaView>
+    </ScrollView>
+   
   );
 }
 
