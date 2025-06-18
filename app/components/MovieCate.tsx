@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 type Genre = {
   id: number;
   name: string;
 };
+type Results={
+    title:string,
+    poster_path:string
+}
 const MovieCate = () => {
     const [cate,setCate]=useState<Genre[]>([])
     const [loading,setLoading]=useState(false)
+    const[movLoading,setMovieloading]=useState(false)
+    const [movies,setmovies]=useState<Results[]>([])
      const [active, setActive] = useState<string | null>(null)
+     const[activeId,setActiveId]=useState<number | null>(null)
     const apiKey="b595089bbce12e3f85f4b29ba3bab776"
     useEffect(()=>{
         setLoading(true)
@@ -17,7 +24,12 @@ const MovieCate = () => {
                 const data=await res.json()
                 const updatedData=data.genres.slice(0,6)
             setCate(updatedData)    
-            if (updatedData.length > 0) setActive(updatedData[0].name);      
+            
+            if (updatedData.length > 0) {
+                setActive(updatedData[0].name)
+                setActiveId(updatedData[0].id)
+
+            };      
 
             
             }
@@ -30,12 +42,32 @@ const MovieCate = () => {
         }
         fetchCate()
     },[])
-      if (loading) {
+    
+
+    useEffect(()=>{
+        setMovieloading(true)
+        const fetchMovies=async ()=>{
+            try{
+                const result=await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${activeId}`)
+                const data=await result.json()
+                const updated=data.results.slice(0,8)
+                setmovies(updated)
+            }
+            catch(e){
+                console.log(e)
+            }
+            finally{
+                setMovieloading(false)
+            }
+        }
+        fetchMovies()
+    },[activeId])
+      if (loading||movLoading) {
     return <ActivityIndicator size="large" />;
   }
     return (
-        <View className='flex-col '>
-            <View className=' flex-row justify-between mr-4 ml-4 my-2 border-l-8 border-red-500 px-2 mb-10 mt-5 items-end'>
+        <View className='flex-col flex-1 '>
+            <View className=' flex-row justify-between mr-4 ml-4 my-2 border-l-8 border-red-500 px-2 mb-5 mt-5 items-end'>
                 <Text className='ml-2 text-white  font-bold' style={{
                     fontSize:30,
                     fontWeight:"600",
@@ -52,9 +84,25 @@ const MovieCate = () => {
         <ScrollView horizontal className='' showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
             {cate.length>0 && cate.map((item)=>(
                 <TouchableOpacity onPress={()=>(
-                    setActive(item.name)
+                    setActive(item.name),
+                    setActiveId(item.id)
                 )} key={item.id} className={`mx-4 border-2  rounded-xl px-3 py-1  ${active===item.name ? 'bg-red-600' : 'border-2 border-white'}`}><Text className='text-white px-2 py-1 text-xl'>{item.name}</Text></TouchableOpacity>
             ))}
+        </ScrollView>
+        <ScrollView className='flex  mx-4 mt-8' horizontal showsVerticalScrollIndicator={false}>
+           {movies.map((item)=>(
+            <TouchableOpacity key={item.title} style={{
+                
+            }} className='mx-6 flex-col'>
+                <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`}}  style={{
+                                width: 120,
+                                height: 180,
+                                borderRadius: 10,
+                            }}
+                            resizeMode="cover"></Image>
+              <Text className='text-white text-center mt-1'>{item.title}</Text>  
+            </TouchableOpacity>
+           ))}
         </ScrollView>
         </View>
     );

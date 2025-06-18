@@ -1,23 +1,29 @@
-import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet } from "react-native";
+import { Platform, ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import Corousel from "../components/Corousel";
 import MovieCate from "../components/MovieCate";
+import Popular from "../components/Popular";
 import Search from "../components/Search";
 
 export default function Page() {
   return (
-    <ScrollView className=" bg-black" style={styles.container}>
-       <SafeAreaView >
+  
+       <View style={styles.container}>
+          <ScrollView className=" bg-black"  >
       <Search/>
       <Corousel/>
       <MovieCate/>
-    </SafeAreaView>
-    </ScrollView>
+      <Popular/>
+    <StatusBar barStyle="light-content" />
+       </ScrollView>
+    </View>
+   
    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop:Platform.OS==="android" ? StatusBar.currentHeight : 0
+    paddingTop:Platform.OS==="android" ? StatusBar.currentHeight : 45,
+    backgroundColor:"black"
   },
 });

@@ -1,16 +1,20 @@
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native';
 
 const Movie = () => {
     const {id}=useLocalSearchParams();
     return (
-        <SafeAreaView className=''>
+        <SafeAreaView style={styles.container}>
             <Text>{id}</Text>
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container:{
+        paddingTop:Platform.OS==="android" ? StatusBar.currentHeight:0
+    }
+})
 
 export default Movie;
