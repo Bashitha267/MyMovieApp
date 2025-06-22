@@ -9,8 +9,12 @@ const Layout = () => {
             headerShown:false
         }}></Stack.Screen>
         <Stack.Screen name='Movie/[id]' options={{
-            headerShown:false
-        }}></Stack.Screen>
+            
+ 
+  
+     
+     headerShown:false
+  }}></Stack.Screen>
        </Stack>
     );
 }
