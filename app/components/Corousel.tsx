@@ -23,7 +23,7 @@ const CarouselWithDots = () => {
           .slice(0, 5)
           .map((movie: any) => ({
             id: movie.id,
-            imageUrl: `https://image.tmdb.org/t/p/w500${movie.backdrop_path || movie.poster_path}`,
+            imageUrl: `https://image.tmdb.org/t/p/w780${movie.backdrop_path || movie.poster_path}`,
           }));
         setImages(imageUrls);
       } catch (e) {

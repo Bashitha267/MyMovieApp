@@ -18,6 +18,10 @@ type Genre = {
   id: number;
   name: string;
 };
+type stills={
+  file_path:string;
+  
+}
 type Cast={
   name:string,
   profile_path:string,
@@ -44,6 +48,8 @@ const Movie = () => {
   const [loading, setLoading] = useState(false);
   const [cloading, setcLoading] = useState(false);
   const [cast,setCast]=useState<Cast[]|null>(null)
+  const[images,setImages]=useState<stills[]|null>(null)
+  const [Imgloading,setImgLoading]=useState(false);
   const apiKey = "b595089bbce12e3f85f4b29ba3bab776";
   useEffect(() => {
     const fetchMovies = async () => {
@@ -85,7 +91,29 @@ getCast()
 
 
   },[id])
-  if (loading||cloading) {
+  useEffect(()=>{
+    const getImages= async ()=>{
+      setImgLoading(true)
+      try{
+        const results=await fetch(`https://api.themoviedb.org/3/movie/${id}/images?api_key=${apiKey}`)
+        const data=await results.json()
+       if (data.backdrops && Array.isArray(data.backdrops)) {
+  setImages(data.backdrops.slice(0, 5));
+  
+} else {
+  setImages([]);
+}
+      }
+      catch(e){
+        console.log(e)
+      }
+      finally{
+        setImgLoading(false)
+      }
+    }
+    getImages();
+  },[id])
+  if (loading||cloading||Imgloading) {
     return <ActivityIndicator size="large"></ActivityIndicator>;
   }
   return (
@@ -96,7 +124,7 @@ getCast()
           <View>
              <Image
             source={{
-              uri: `https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`,
+              uri: `https://image.tmdb.org/t/p/w780/${movie?.backdrop_path}`,
             }}
             style={{
               width:width,
@@ -131,24 +159,45 @@ getCast()
             <View className="border border-gray-500 px-3 py-1 items-center"><Text className="text-white">{movie?.runtime} min</Text></View>
 
           </View>
-          <View className="flex-col mt-8 mx-1">
+              <View className="flex-col mt-8 mx-1">
             <View className="  "><Text className=" border-l-8 border-red-600  ml-2 text-white text-2xl mb-4 pl-3 py-2" style={{
               fontWeight:600,
               fontSize:29
             }}>Overview</Text></View>
             <View className=" " style={{
               
-            }}><Text className="text-white text-balance font-serif px-2" style={{
+            }}><Text className="text-white text-justify font-serif px-2" style={{
               fontSize:18,
               fontWeight:300,
               
             }}> {movie?.overview}</Text></View>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} className="mt-6 flex-row">
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} className="mx-2 mt-6 flex-row">
             {movie?.genres.map((item)=>(
                 <TouchableOpacity key={item.id} className="border border-gray-500 px-3 py-1 items-center mx-4"><Text className="text-white">{item.name}</Text></TouchableOpacity>
             ))}
           </ScrollView>
+          <View  className="flex-col">
+            <View className="mt-8 mx-1 "><Text className=" border-l-8 border-red-600  ml-2 text-white text-2xl mb-4 pl-3 py-2" style={{
+              fontWeight:600,
+              fontSize:29
+            }}>Quick Clicks</Text></View>
+            <ScrollView horizontal className="mx-4">
+              {
+                images?.map((item)=>(
+                  <Image source={{uri:`https://image.tmdb.org/t/p/original${item.file_path}`}}    style={{ width: 200, height: 200 }}
+      resizeMode="cover" key={item.file_path} className="mx-4"></Image>
+                ))
+              }
+            </ScrollView>
+
+          </View>
+              
+          
+
+
+
+          
           <View>
             <Text className=" mt-6 border-l-8 border-red-600  ml-2 text-white text-2xl mb-4 pl-3 py-2" style={{
               fontWeight:600,
