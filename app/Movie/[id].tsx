@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 
@@ -133,18 +133,32 @@ getCast()
             }}
           ></Image>
           </View>
-         <View className="absolute bottom-0  items-start mb-4 flex-col mx-4" style={{
+         <View className="absolute bottom-0   mb-4 flex-col  p-1 mx-auto justify-center items-center" style={{
           width:width
          }}>
-          <Text className="  text-white mb-1" style={{
+          <Text className=" text-center text-white mb-1" style={{
             fontWeight:700,
             fontSize:45,
             
           }}>{movie?.title}</Text>
-          <Text className="text-white" style={{
+          <View className="flex flex-row justify-center items-center  gap-4 mt-1 mb-2" style={{
+            width:width
+          }}>
+           {
+            movie?.genres.map((item)=>(
+              <Text key={item.id} className="text-[#dae1e9]" style={{
+                fontWeight:700,
+                fontSize:16,
+                
+                
+              }}><MaterialIcons name="fiber-manual-record" size={8} color="grey"></MaterialIcons>{item.name}</Text>
+            ))
+           }
+          </View>
+          {/* <Text className="text-white" style={{
             fontWeight:500,
             fontSize:17
-          }}>{movie?.tagline}</Text>
+          }}>{movie?.tagline}</Text> */}
 
          </View>
         </View>
@@ -172,11 +186,11 @@ getCast()
               
             }}> {movie?.overview}</Text></View>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} className="mx-2 mt-6 flex-row">
+          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} className="mx-2 mt-6 flex-row">
             {movie?.genres.map((item)=>(
                 <TouchableOpacity key={item.id} className="border border-gray-500 px-3 py-1 items-center mx-4"><Text className="text-white">{item.name}</Text></TouchableOpacity>
             ))}
-          </ScrollView>
+          </ScrollView> */}
           <View  className="flex-col">
             <View className="mt-8 mx-1 "><Text className=" border-l-8 border-red-600  ml-2 text-white text-2xl mb-4 pl-3 py-2" style={{
               fontWeight:600,

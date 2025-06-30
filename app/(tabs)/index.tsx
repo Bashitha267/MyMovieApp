@@ -2,18 +2,17 @@ import { Platform, ScrollView, StatusBar, StyleSheet, View } from "react-native"
 import Corousel from "../components/Corousel";
 import MovieCate from "../components/MovieCate";
 import Popular from "../components/Popular";
-import Search from "../components/Search";
 
 export default function Page() {
   return (
   
        <View style={styles.container}>
           <ScrollView className=" bg-black"  >
-      <Search/>
+      
       <Corousel/>
       <MovieCate/>
       <Popular/>
-    <StatusBar barStyle="light-content" />
+    <StatusBar barStyle="default" />
        </ScrollView>
     </View>
    
