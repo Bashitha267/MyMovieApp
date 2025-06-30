@@ -1,6 +1,6 @@
 import { Platform, ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import Corousel from "../components/Corousel";
-import MovieCate from "../components/MovieCate";
+import Latest from "../components/Latest";
 import Popular from "../components/Popular";
 
 export default function Page() {
@@ -10,8 +10,9 @@ export default function Page() {
           <ScrollView className=" bg-black"  >
       
       <Corousel/>
-      <MovieCate/>
       <Popular/>
+    
+      <Latest/>
     <StatusBar barStyle="default" />
        </ScrollView>
     </View>

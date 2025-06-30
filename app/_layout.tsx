@@ -15,6 +15,10 @@ const Layout = () => {
      
      headerShown:false
   }}></Stack.Screen>
+  <Stack.Screen name='TV/[id]' 
+  options={{
+    headerShown:false
+  }}></Stack.Screen>
        </Stack>
     );
 }

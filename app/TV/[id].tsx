@@ -3,16 +3,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 
 import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Dimensions,
+    Image,
+    Platform,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from "react-native";
 type Genre = {
   id: number;
@@ -29,16 +29,16 @@ type Cast={
 }
 type Movie = {
   id: number;
-  title: string;
+  name: string;
   poster_path: string;
-  release_date: string;
+  first_air_date: string;
   original_language: string;
   overview: string;
   genres: Genre[];
   backdrop_path: string;
   tagline:string;
   adult:boolean;
-  runtime:string;
+ 
 };
 const Movie = () => {
   const {height,width}=Dimensions.get("window")
@@ -56,7 +56,7 @@ const Movie = () => {
       setLoading(true);
       try {
         const results = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`
+          `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}`
         );
         const data = await results.json();
         // console.log(data);
@@ -73,7 +73,7 @@ const Movie = () => {
     const getCast=async()=>{
       setcLoading(true)
       try{
-        const results=await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`)
+        const results=await fetch(`https://api.themoviedb.org/3/tv/${id}/credits?api_key=${apiKey}`)
         const data=await results.json()
        setCast(data.cast.slice(0,10))
         
@@ -95,7 +95,7 @@ getCast()
     const getImages= async ()=>{
       setImgLoading(true)
       try{
-        const results=await fetch(`https://api.themoviedb.org/3/movie/${id}/images?api_key=${apiKey}`)
+        const results=await fetch(`https://api.themoviedb.org/3/tv/${id}/images?api_key=${apiKey}`)
         const data=await results.json()
        if (data.backdrops && Array.isArray(data.backdrops)) {
   setImages(data.backdrops.slice(0, 5));
@@ -140,7 +140,7 @@ getCast()
             fontWeight:700,
             fontSize:45,
             
-          }}>{movie?.title}</Text>
+          }}>{movie?.name}</Text>
           <View className="flex flex-row justify-center items-center  gap-4 mt-1 mb-2" style={{
             width:width
           }}>
@@ -165,16 +165,8 @@ getCast()
         </View>
         <View className="flex-col mt-5 mx-4">
           {/* tags line */}
-          <View className="flex-row justify-between">   
-            {(movie?.adult) && (
-              <TouchableOpacity className="border border-gray-500 px-3 py-1 items-center"><Text className="text-white">18+</Text></TouchableOpacity>
-            )}
-            <View className="border border-gray-500 px-3 py-1 items-center"><Text className="text-white ">{movie?.release_date.slice(0,4)}</Text></View>
-            <View className="border border-gray-500 px-3 py-1 items-center"><Text className="text-white" >{movie?.original_language.toUpperCase()}</Text></View>
-            <View className="border border-gray-500 px-3 py-1 items-center"><Text className="text-white">{movie?.runtime} min</Text></View>
-
-          </View>
-              <View className="flex-col mt-8 mx-1">
+        
+              <View className="flex-col  mx-1">
             <View className="  "><Text className=" border-l-8 border-red-600  ml-2 text-white text-2xl mb-4 pl-3 py-2" style={{
               fontWeight:600,
               fontSize:29
