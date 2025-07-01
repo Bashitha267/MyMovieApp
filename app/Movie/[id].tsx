@@ -1,4 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 
@@ -41,6 +42,7 @@ type Movie = {
   runtime:string;
 };
 const Movie = () => {
+  
   const {height,width}=Dimensions.get("window")
   const router = useRouter();
   const { id } = useLocalSearchParams();
@@ -51,6 +53,53 @@ const Movie = () => {
   const[images,setImages]=useState<stills[]|null>(null)
   const [Imgloading,setImgLoading]=useState(false);
   const apiKey = "b595089bbce12e3f85f4b29ba3bab776";
+const [isBookmarked, setIsBookmarked] = useState(false);
+
+
+const addBookmark = async (movie: Movie) => {
+  try {
+    const existing = await AsyncStorage.getItem('bookmarks');
+    const bookmarks: Movie[] = existing ? JSON.parse(existing) : [];
+    const isAlready = bookmarks.some((m) => m.id === movie.id);
+    if (isAlready) return;
+
+    bookmarks.push(movie);
+    await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    setIsBookmarked(true);
+    console.log('Movie added to bookmarks');
+  } catch (error) {
+    console.error('Error adding bookmark', error);
+  }
+};
+
+const removeBookmark = async (id: number) => {
+  try {
+    const existing = await AsyncStorage.getItem('bookmarks');
+    const bookmarks: Movie[] = existing ? JSON.parse(existing) : [];
+    const updated = bookmarks.filter((m) => m.id !== id);
+    await AsyncStorage.setItem('bookmarks', JSON.stringify(updated));
+    setIsBookmarked(false);
+    console.log('Movie removed from bookmarks');
+  } catch (error) {
+    console.error('Failed to remove bookmark', error);
+  }
+};
+useEffect(() => {
+  const checkIfBookmarked = async () => {
+    if (!movie) return;
+    const existing = await AsyncStorage.getItem('bookmarks');
+    const bookmarks: Movie[] = existing ? JSON.parse(existing) : [];
+    const isSaved = bookmarks.some((m) => m.id === movie.id);
+    setIsBookmarked(isSaved);
+  };
+  checkIfBookmarked();
+}, [movie]);
+
+
+
+
+
+
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
@@ -259,12 +308,20 @@ getCast()
               backgroundColor: "transparent",
             }}
             className="rounded-full px-1 py-1"
-          >
-            <Ionicons
-              name="ellipsis-horizontal"
-              size={30}
-              color="white"
-            ></Ionicons>
+          onPress={() => {
+    if (!movie) return;
+    isBookmarked ? removeBookmark(movie.id) : addBookmark(movie);
+  }}>
+            {
+              isBookmarked && (
+                <MaterialIcons name="bookmark-added" size={30} color="white"></MaterialIcons>
+              )
+            }
+            {
+              isBookmarked===false && (
+                <MaterialIcons name="bookmark-outline"  size={30} color="white"></MaterialIcons>
+              )
+            }
           </TouchableOpacity>
         </View>
       </View>

@@ -34,13 +34,7 @@ const Layout = () => {
                 <Ionicons name='heart' color={color} size={size}></Ionicons>
                )
             }}></Tabs.Screen>
-             <Tabs.Screen name='User' options={{
-                title:"",
-                headerShown:false,
-               tabBarIcon:({color,size})=>(
-                <Ionicons name='person' color={color} size={size}></Ionicons>
-               )
-            }}></Tabs.Screen>
+            
         </Tabs>
     );
 }
